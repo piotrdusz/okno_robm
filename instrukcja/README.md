@@ -44,9 +44,7 @@ Za wykonanie ćwiczenia można uzyskać maksymalnie **13 punktów**. Punkty przy
 | Zadanie | Punkty | Warunek uzyskania punktów |
 | --- | ---: | --- |
 | Uruchomienie środowiska i podstawy ROS 2 | 1 | Uruchomiona symulacja TurtleBot3 w Gazebo, RViz2 oraz wykonanie poleceń z części wprowadzającej. |
-| Śledzenie trajektorii: poprawne dane wejściowe i wyjściowe | 2 | Węzeł odbiera pozycję robota oraz cel, wyznacza trajektorię i publikuje polecenia na `/cmd_vel`. |
-| Śledzenie trajektorii: implementacja regulatora | 3 | Uzupełniony regulator oblicza prędkość liniową i kątową z wykorzystaniem błędów położenia oraz orientacji. |
-| Śledzenie trajektorii: działanie w symulacji | 1 | Robot po wskazaniu celu w RViz2 podąża za wyświetloną trajektorią. |
+| Śledzenie trajektorii | 6 | Uzupełniony regulator poprawnie prowadzi robota po trajektorii odniesienia. |
 | Stabilizacja w punkcie docelowym | 4 | Po zakończeniu trajektorii robot dojeżdża do celu i ustawia docelową orientację. |
 | Unikanie kolizji | 2 | Robot reaguje na przeszkodę wykrytą przez `/scan`, nie kontynuując ruchu w kierunku kolizji. |
 
