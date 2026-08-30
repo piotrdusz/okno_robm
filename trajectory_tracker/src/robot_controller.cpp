@@ -1,4 +1,4 @@
-#include "okno_trajectory_tracker/robot_controller.hpp"
+#include "trajectory_tracker/robot_controller.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -7,7 +7,7 @@
 #include "tf2/utils.h"
 #include "tf2_geometry_msgs/tf2_geometry_msgs.hpp"
 
-namespace okno_trajectory_tracker
+namespace trajectory_tracker
 {
 
 namespace
@@ -252,4 +252,4 @@ double RobotController::sign(double value)
   return (value > 0.0) - (value < 0.0);
 }
 
-}  // namespace okno_trajectory_tracker
+}  // namespace trajectory_tracker

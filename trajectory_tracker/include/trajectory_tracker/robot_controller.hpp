@@ -1,5 +1,5 @@
-#ifndef OKNO_TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_
-#define OKNO_TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_
+#ifndef TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_
+#define TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_
 
 #include <memory>
 
@@ -11,7 +11,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
 
-namespace okno_trajectory_tracker
+namespace trajectory_tracker
 {
 
 class RobotController : public rclcpp::Node
@@ -94,6 +94,6 @@ private:
   rclcpp::TimerBase::SharedPtr control_timer_;
 };
 
-}  // namespace okno_trajectory_tracker
+}  // namespace trajectory_tracker
 
-#endif  // OKNO_TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_
+#endif  // TRAJECTORY_TRACKER__ROBOT_CONTROLLER_HPP_

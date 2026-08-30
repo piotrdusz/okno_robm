@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(okno_trajectory_tracker)
+project(trajectory_tracker)
 
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 17)

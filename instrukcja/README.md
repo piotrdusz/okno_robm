@@ -742,11 +742,11 @@ ros2 pkg list | grep teleop_panel
 
 Jeżeli w wyniku pojawi się `teleop_panel`, budowanie panelu zakończyło się poprawnie.
 
-W dalszej części zbudujesz także pakiet `okno_trajectory_tracker`, zawierający węzeł C++ realizujący śledzenie trajektorii.
+W dalszej części zbudujesz także pakiet `trajectory_tracker`, zawierający węzeł C++ realizujący śledzenie trajektorii.
 
 ## 10. Szablon programu śledzenia trajektorii
 
-Pakiet `okno_trajectory_tracker` zawiera jeden węzeł ROS 2 napisany w C++. Jego zadaniem jest obliczenie prędkości robota i opublikowanie jej na `/cmd_vel`.
+Pakiet `trajectory_tracker` zawiera jeden węzeł ROS 2 napisany w C++. Jego zadaniem jest obliczenie prędkości robota i opublikowanie jej na `/cmd_vel`.
 
 Nie zmieniaj nazw tematów ani struktury pakietu. Fragmenty wymagające implementacji są oznaczone komentarzem `TODO`.
 
@@ -755,17 +755,17 @@ Nie zmieniaj nazw tematów ani struktury pakietu. Fragmenty wymagające implemen
 Po sklonowaniu repozytorium pakiet znajduje się w katalogu:
 
 ```text
-~/okno_ws/src/okno_robm/okno_trajectory_tracker
+~/okno_ws/src/okno_robm/trajectory_tracker
 ```
 
 Najważniejsze pliki są następujące:
 
 ```text
-okno_trajectory_tracker/
+trajectory_tracker/
 ├── CMakeLists.txt
 ├── package.xml
 ├── include/
-│   └── okno_trajectory_tracker/
+│   └── trajectory_tracker/
 │       └── robot_controller.hpp
 ├── src/
 │   ├── robot_controller.cpp
@@ -828,7 +828,7 @@ source ~/okno_ws/install/setup.bash
 ```
 
 ```bash
-ros2 run okno_trajectory_tracker trajectory_tracker_node
+ros2 run trajectory_tracker trajectory_tracker_node
 ```
 
 Po uruchomieniu węzeł przejdzie do stanu `Ready`. W RViz2 wyłącz panel **Teleop**, wskaż cel narzędziem **2D Goal Pose** i obserwuj komunikaty w terminalu.
@@ -970,7 +970,7 @@ Celem jest uzupełnienie regulatora w metodzie `pathTrackingControl`. Regulator 
 W VS Code otwórz plik:
 
 ```text
-okno_trajectory_tracker/src/robot_controller.cpp
+trajectory_tracker/src/robot_controller.cpp
 ```
 
 Znajdź metodę:
@@ -986,7 +986,7 @@ W metodzie znajdują się komentarze `TODO 1` oraz `TODO 2`. Nie usuwaj żadnych
 Otwórz plik:
 
 ```text
-okno_trajectory_tracker/include/okno_trajectory_tracker/robot_controller.hpp
+trajectory_tracker/include/trajectory_tracker/robot_controller.hpp
 ```
 
 Znajdź pola:
@@ -1017,7 +1017,7 @@ cd ~/okno_ws
 Zbuduj tylko modyfikowany pakiet:
 
 ```bash
-colcon build --packages-select okno_trajectory_tracker --symlink-install
+colcon build --packages-select trajectory_tracker --symlink-install
 ```
 
 Po poprawnym zbudowaniu załaduj wynik kompilacji:
@@ -1040,7 +1040,7 @@ Jeżeli pojawi się błąd kompilacji, przeczytaj pierwszą linię zawierającą
 	```
 
 	```bash
-	ros2 run okno_trajectory_tracker trajectory_tracker_node
+	ros2 run trajectory_tracker trajectory_tracker_node
 	```
 
 5. W RViz2 wybierz narzędzie **2D Goal Pose**.
@@ -1073,7 +1073,7 @@ Należy dodać niewielką zmienną w czasie prędkość referencyjną, zgodnie z
 W pliku:
 
 ```text
-okno_trajectory_tracker/src/robot_controller.cpp
+trajectory_tracker/src/robot_controller.cpp
 ```
 
 znajdź metodę:
@@ -1103,7 +1103,7 @@ Nie zmieniaj metody `pathTrackingControl`. Wykorzystaj ją ponownie po przygotow
 	```
 
 	```bash
-	colcon build --packages-select okno_trajectory_tracker --symlink-install
+	colcon build --packages-select trajectory_tracker --symlink-install
 	```
 
 2. Załaduj wynik kompilacji:
@@ -1160,7 +1160,7 @@ Kierunek jazdy robota do przodu odpowiada kątowi bliskiemu $0\,\mathrm{rad}$.
 W pliku:
 
 ```text
-okno_trajectory_tracker/src/robot_controller.cpp
+trajectory_tracker/src/robot_controller.cpp
 ```
 
 znajdź metodę:
@@ -1201,7 +1201,7 @@ Prawidłowy rezultat: robot może nie znaleźć optymalnej drogi do celu, ale ni
 | --- | --- |
 | `ros2: command not found` | Otwórz nowy terminal WSL. Sprawdź, czy w `~/.bashrc` znajduje się `source /opt/ros/jazzy/setup.bash`. |
 | `Package '...' not found` | Wykonaj `cd ~/okno_ws`, następnie `colcon build --symlink-install` i `source install/setup.bash`. |
-| Po zmianie kodu zachowanie robota się nie zmienia | Ponownie zbuduj pakiet przez `colcon build --packages-select okno_trajectory_tracker --symlink-install`, a następnie wykonaj `source install/setup.bash` i uruchom węzeł od nowa. |
+| Po zmianie kodu zachowanie robota się nie zmienia | Ponownie zbuduj pakiet przez `colcon build --packages-select trajectory_tracker --symlink-install`, a następnie wykonaj `source install/setup.bash` i uruchom węzeł od nowa. |
 | Gazebo lub RViz2 nie uruchamia okna | Sprawdź, czy terminal został uruchomiony przez `wsl`, a system Windows jest aktualny. Zamknij proces przez `Ctrl+C`, otwórz nowy terminal i spróbuj ponownie. |
 | RViz2 nie wyświetla modelu, TF albo skanera | Najpierw uruchom Gazebo. Następnie uruchom RViz2 z konfiguracją `config/okno.rviz`. |
 | Robot nie reaguje na panel Teleop | Sprawdź, czy panel został uruchomiony przyciskiem **Start** oraz czy Gazebo nadal działa. |
@@ -1222,5 +1222,5 @@ Prawidłowy rezultat: robot może nie znaleźć optymalnej drogi do celu, ale ni
 | `ros2 interface show geometry_msgs/msg/TwistStamped` | Definicja wiadomości prędkości. |
 | `ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` | Uruchomienie Gazebo z TurtleBot3 Burger. |
 | `rviz2 -d config/okno.rviz` | Uruchomienie przygotowanej konfiguracji RViz2. |
-| `colcon build --packages-select okno_trajectory_tracker --symlink-install` | Kompilacja pakietu studenta. |
+| `colcon build --packages-select trajectory_tracker --symlink-install` | Kompilacja pakietu studenta. |
 | `source ~/okno_ws/install/setup.bash` | Udostępnienie zbudowanych pakietów w terminalu. |
