@@ -29,7 +29,7 @@ RobotController::RobotController()
     "/scan", rclcpp::SensorDataQoS(),
     std::bind(&RobotController::laserScanCallback, this, std::placeholders::_1));
 
-  command_publisher_ = create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+  command_publisher_ = create_publisher<geometry_msgs::msg::TwistStamped>("/cmd_vel", 10);
   path_publisher_ = create_publisher<nav_msgs::msg::Path>("/reference_path", 10);
   target_pose_publisher_ = create_publisher<geometry_msgs::msg::PoseStamped>("/target_pose", 10);
 
@@ -112,7 +112,11 @@ void RobotController::controlLoop()
     command = geometry_msgs::msg::Twist{};
   }
 
-  command_publisher_->publish(collisionAvoidance(command));
+  geometry_msgs::msg::TwistStamped command_message;
+  command_message.header.stamp = now();
+  command_message.header.frame_id = "base_footprint";
+  command_message.twist = collisionAvoidance(command);
+  command_publisher_->publish(command_message);
 }
 
 RobotController::Pose2D RobotController::poseFromMessage(const geometry_msgs::msg::Pose & pose) const

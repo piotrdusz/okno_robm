@@ -366,10 +366,15 @@ W ćwiczeniu będą używane między innymi następujące tematy:
 | `/goal_pose` | RViz2 → program studenta | Pozycja i orientacja celu wskazanego myszą. |
 | `/cmd_vel` | program studenta → robot | Polecenie prędkości liniowej i kątowej robota. |
 
-Dla przykładu wiadomość typu `geometry_msgs/msg/TwistStamped`, publikowana na `/cmd_vel`, zawiera między innymi:
+Wiadomość `geometry_msgs/msg/TwistStamped`, publikowana na `/cmd_vel`, składa się z dwóch głównych części:
 
-- `linear.x` – prędkość jazdy do przodu lub do tyłu w metrach na sekundę;
-- `angular.z` – prędkość obrotu wokół osi pionowej w radianach na sekundę.
+- `header` zawiera czas utworzenia wiadomości (`stamp`) oraz nazwę układu współrzędnych (`frame_id`);
+- `twist` zawiera właściwe polecenie prędkości typu `geometry_msgs/msg/Twist`.
+
+W ćwiczeniu używane są pola wewnątrz `twist`:
+
+- `twist.linear.x` – prędkość jazdy do przodu lub do tyłu w metrach na sekundę;
+- `twist.angular.z` – prędkość obrotu wokół osi pionowej w radianach na sekundę.
 
 Dla robota poruszającego się po płaskiej powierzchni najczęściej wykorzystuje się tylko te dwa pola.
 
@@ -604,13 +609,13 @@ Wyświetl definicję wiadomości polecenia prędkości:
 ros2 interface show geometry_msgs/msg/TwistStamped
 ```
 
-Odszukaj pola `linear` oraz `angular`. Każde z nich ma typ `Vector3`, który zawiera trzy składowe: `x`, `y` i `z`.
+Najpierw znajduje się `header`, a następnie pole `twist` typu `geometry_msgs/msg/Twist`. Wewnątrz `twist` znajdują się pola `linear` oraz `angular`. Każde z nich ma typ `Vector3`, który zawiera trzy składowe: `x`, `y` i `z`.
 
 W ćwiczeniu do sterowania robotem będą używane pola:
 
 ```text
-linear.x
-angular.z
+twist.linear.x
+twist.angular.z
 ```
 
 ### 8.4. Podgląd odometrii
@@ -650,18 +655,20 @@ Przed wykonaniem tego kroku wyłącz publikowanie w panelu **Teleop** przyciskie
 Wykonaj polecenie:
 
 ```bash
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{linear: {x: 0.1}, angular: {z: 0.0}}"
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{twist: {linear: {x: 0.1}, angular: {z: 0.0}}}"
 ```
 
 Robot powinien rozpocząć jazdę do przodu. Po kilku sekundach naciśnij `Ctrl+C`, aby zatrzymać publikowanie poleceń. Robot zatrzyma się po krótkiej chwili.
 
-W tym samym poleceniu zmień wartość `angular.z`, na przykład na `0.5`, i sprawdź, jak zmienia się ruch robota:
+W tym samym poleceniu zmień wartość `twist.angular.z`, na przykład na `0.5`, i sprawdź, jak zmienia się ruch robota:
 
 ```bash
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{linear: {x: 0.1}, angular: {z: 0.5}}"
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{twist: {linear: {x: 0.1}, angular: {z: 0.5}}}"
 ```
 
-To samo polecenie będzie później publikowane przez program napisany w C++, z tą różnicą, że wartości prędkości zostaną obliczone przez regulator.
+Ważne jest zagnieżdżenie danych w polu `twist`. Wiadomość bez tego pola ma nieprawidłową strukturę dla typu `TwistStamped`.
+
+To samo polecenie będzie później publikowane przez program napisany w C++, z tą różnicą, że wartości prędkości zostaną obliczone przez regulator, a program uzupełni także czas w `header.stamp`.
 
 ## 9. Budowanie przestrzeni roboczej
 
@@ -791,6 +798,8 @@ Węzeł `trajectory_tracker` korzysta z następujących tematów:
 
 Odometria i cel są wyrażone w układzie `odom`. Dzięki temu położenie robota i punktu docelowego można porównywać bez dodatkowych przekształceń układów współrzędnych.
 
+Regulator oblicza prędkości w pomocniczej wiadomości `geometry_msgs/msg/Twist`, ponieważ zawiera ona wyłącznie pola prędkości. Przed publikacją węzeł umieszcza ją w polu `twist` wiadomości `geometry_msgs/msg/TwistStamped`, wpisuje bieżący czas w `header.stamp` i używa `base_footprint` jako `header.frame_id`.
+
 ### 10.3. Przepływ działania
 
 1. Student wskazuje cel za pomocą **2D Goal Pose** w RViz2.
@@ -798,8 +807,8 @@ Odometria i cel są wyrażone w układzie `odom`. Dzięki temu położenie robot
 3. Węzeł wyznacza parametryczną trajektorię kończącą się w zadanym celu i publikuje ją na `/reference_path`.
 4. Co $0{,}1\,\mathrm{s}$ węzeł odbiera aktualną pozycję z `/odom`.
 5. Węzeł oblicza położenie i prędkość referencyjną dla bieżącej chwili trajektorii.
-6. Regulator oblicza `linear.x` i `angular.z`.
-7. Węzeł publikuje wiadomość `Twist` na `/cmd_vel`.
+6. Regulator oblicza `linear.x` i `angular.z` pomocniczej wiadomości `Twist`.
+7. Węzeł wpisuje tę wiadomość do pola `twist`, ustawia nagłówek i publikuje `TwistStamped` na `/cmd_vel`.
 8. Gazebo symuluje ruch robota i publikuje nową odometrię.
 
 ### 10.4. Stany kontrolera
@@ -910,7 +919,7 @@ $$
 
 gdzie:
 
-- $v$ i $\omega$ są prędkościami publikowanymi w wiadomości `/cmd_vel`;
+- $v$ i $\omega$ są prędkościami zapisywanymi w polach `twist.linear.x` i `twist.angular.z` wiadomości publikowanej na `/cmd_vel`;
 - $v_t$ i $\omega_t$ są prędkościami trajektorii odniesienia;
 - $k_1$, $k_2$ i $k_3$ są dodatnimi parametrami regulatora;
 - $\operatorname{sgn}(v_t)$ to funkcja znaku: $1$ dla wartości dodatniej, $-1$ dla ujemnej oraz $0$ dla zera.
@@ -997,7 +1006,7 @@ Ustaw samodzielnie dodatnie wartości parametrów. Dobór wartości jest częśc
 
 1. W miejscu `TODO 1` oblicz błędy $e_{x,\mathrm{robot}}$, $e_{y,\mathrm{robot}}$ oraz $e_{\theta}$ według wzorów z sekcji 11.
 2. W miejscu `TODO 2` zaimplementuj wzory regulatora z sekcji 11.3.
-3. Użyj pól `linear.x` i `angular.z` wiadomości `command` do zapisania obliczonych prędkości.
+3. Użyj pól `linear.x` i `angular.z` pomocniczej wiadomości `command` typu `Twist` do zapisania obliczonych prędkości. Pętla sterowania automatycznie umieści ją później w polu `twist` publikowanej wiadomości `TwistStamped`.
 4. Do obliczenia błędu orientacji użyj gotowej funkcji `shortestAngularDistance`.
 
 ### 12.4. Kompilacja
@@ -1201,6 +1210,7 @@ Prawidłowy rezultat: robot może nie znaleźć optymalnej drogi do celu, ale ni
 | Robot nie reaguje na panel Teleop | Sprawdź, czy panel został uruchomiony przyciskiem **Start** oraz czy Gazebo nadal działa. |
 | Robot reaguje chaotycznie | Tylko jedno źródło może publikować ruch. Zatrzymaj publikowanie w Teleop przed uruchomieniem kontrolera oraz przerwij inne polecenia `ros2 topic pub` przez `Ctrl+C`. |
 | Robot nie rusza po wskazaniu celu | Upewnij się, że węzeł `trajectory_tracker` jest uruchomiony, a panel Teleop jest zatrzymany. Sprawdź też, czy regulator z zadania podstawowego został uzupełniony i czy `k1`, `k2`, `k3` są dodatnie. |
+| Publikator nie łączy się z `/cmd_vel` albo polecenie z terminala kończy się błędem | Sprawdź przez `ros2 topic info /cmd_vel --verbose`, czy temat ma typ `geometry_msgs/msg/TwistStamped`. W poleceniu `ros2 topic pub` prędkości muszą być zagnieżdżone w `twist`, na przykład `twist: {linear: {x: 0.1}}`. |
 | Błąd kompilacji C++ | Odszukaj pierwszą linię z `error:`. Najczęściej przyczyną jest brak średnika, literówka w nazwie zmiennej albo niedomknięty nawias. |
 
 ## Załącznik A. Ściąga poleceń
