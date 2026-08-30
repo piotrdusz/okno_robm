@@ -76,14 +76,8 @@ Na stanowisku znajdują się:
 ### Otwarcie terminala
 
 1. Otwórz menu Start systemu Windows.
-2. Uruchom aplikację **Windows PowerShell**.
-3. Wpisz poniższe polecenie i naciśnij `Enter`:
-
-	```bash
-	wsl
-	```
-
-4. Pojawi się terminal Linux. Wszystkie polecenia z instrukcji, o ile nie zaznaczono inaczej, wpisuj w tym terminalu.
+2. Uruchom aplikację **WSL**.
+3. Pojawi się terminal Linux. Wszystkie polecenia z instrukcji, o ile nie zaznaczono inaczej, wpisuj w tym terminalu.
 
 ### Otwarcie Visual Studio Code
 
