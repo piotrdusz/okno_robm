@@ -910,7 +910,7 @@ $$
 
 $$
 \omega = \omega_t +
-k_2 \operatorname{sgn}(v_t) e_{y,\mathrm{robot}} +
+k_2 \mathrm{sgn}(v_t) e_{y,\mathrm{robot}} +
 k_3 e_{\theta}
 $$
 
@@ -919,7 +919,7 @@ gdzie:
 - $v$ i $\omega$ są prędkościami zapisywanymi w polach `twist.linear.x` i `twist.angular.z` wiadomości publikowanej na `/cmd_vel`;
 - $v_t$ i $\omega_t$ są prędkościami trajektorii odniesienia;
 - $k_1$, $k_2$ i $k_3$ są dodatnimi parametrami regulatora;
-- $\operatorname{sgn}(v_t)$ to funkcja znaku: $1$ dla wartości dodatniej, $-1$ dla ujemnej oraz $0$ dla zera.
+- $\mathrm{sgn}(v_t)$ to funkcja znaku: $1$ dla wartości dodatniej, $-1$ dla ujemnej oraz $0$ dla zera.
 
 W szablonie parametry regulatora mają celowo zerowe wartości:
 
@@ -936,7 +936,7 @@ Przed testem regulatora ustaw samodzielnie dodatnie wartości tych trzech parame
 Po zakończeniu trajektorii prędkość zadana $v_t$ byłaby równa zero. W takim przypadku składnik z błędem bocznym $e_{y,\mathrm{robot}}$ nie działa, ponieważ:
 
 $$
-\operatorname{sgn}(0) = 0
+\mathrm{sgn}(0) = 0
 $$
 
 Dlatego w stanie `GoalPositionApproaching` regulator otrzymuje niewielką, zmienną prędkość referencyjną:
