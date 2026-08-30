@@ -253,7 +253,7 @@ sudo apt install -y ros-${ROS_DISTRO}-ros-gz
 ```
 
 ```bash
-sudo apt install -y ros-jazzy-turtlebot3-gazebo
+sudo apt install -y ros-${ROS_DISTRO}-turtlebot3-gazebo
 ```
 
 W ćwiczeniu używany jest model TurtleBot3 Burger. Ustaw go dla każdej nowej sesji terminala:
