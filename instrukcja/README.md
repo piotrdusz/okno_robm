@@ -515,7 +515,7 @@ W oknie RViz2 zwróć uwagę na:
 
 Panel **Teleop** publikuje wiadomości typu `geometry_msgs/msg/Twist` na temat `/cmd_vel`.
 
-1. W panelu **Teleop** włącz publikowanie poleceń przyciskiem **Start**.
+1. W panelu **Teleop** włącz publikowanie poleceń przyciskiem **Enabled**.
 2. Użyj pola sterowania 2D w panelu.
 3. Przesunięcie wskaźnika w górę powoduje jazdę do przodu.
 4. Przesunięcie wskaźnika w dół powoduje jazdę do tyłu.
