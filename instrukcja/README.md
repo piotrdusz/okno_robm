@@ -316,8 +316,8 @@ Ctrl+C
 4. Otwórz widok rozszerzeń skrótem `Ctrl+Shift+X`.
 5. Zainstaluj rozszerzenia:
 	- **WSL** firmy Microsoft;
-	- **C/C++** firmy Microsoft;
-	- **ROS** firmy Microsoft.
+	- **C++ Extension Pack** firmy Microsoft;
+	- **Robotics Developer Environment** firmy Ranch Hand Robotics LLC.
 
 Po instalacji otwórz terminal WSL i sprawdź integrację:
 
