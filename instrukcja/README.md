@@ -48,8 +48,6 @@ Za wykonanie ćwiczenia można uzyskać maksymalnie **13 punktów**. Punkty przy
 | Stabilizacja w punkcie docelowym | 4 | Po zakończeniu trajektorii robot dojeżdża do celu i ustawia docelową orientację. |
 | Unikanie kolizji | 2 | Robot reaguje na przeszkodę wykrytą przez `/scan`, nie kontynuując ruchu w kierunku kolizji. |
 
-Zadanie unikania kolizji jest zadaniem dodatkowym, przeznaczonym dla osób, które ukończyły wcześniejsze etapy.
-
 Podczas prezentacji rozwiązania prowadzący może poprosić o:
 
 - wskazanie używanych tematów ROS 2;
