@@ -308,6 +308,12 @@ Po kilku sekundach powinno pojawić się okno Gazebo z robotem TurtleBot3 Burger
 Ctrl+C
 ```
 
+Możesz także uruchomić pusty świat, bez przeszkód:
+
+```bash
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
+
 ### 4.8. Instalacja Visual Studio Code
 
 1. W systemie Windows pobierz i zainstaluj [Visual Studio Code](https://code.visualstudio.com/).
@@ -458,6 +464,12 @@ W tej części uruchomisz symulację TurtleBot3 Burger. Gazebo będzie symulowa�
 	```
 
 5. Poczekaj, aż pojawi się okno Gazebo. Nie zamykaj terminala, z którego uruchomiono polecenie.
+
+Jeżeli chcesz sprawdzić regulator bez przeszkód, zamiast standardowego świata uruchom pusty świat:
+
+```bash
+ros2 launch turtlebot3_gazebo empty_world.launch.py
+```
 
 W oknie Gazebo powinny być widoczne:
 
