@@ -471,7 +471,7 @@ W oknie Gazebo powinny być widoczne:
 - przeszkody;
 - światła oraz siatka podłoża.
 
-> `[Miejsce na zrzut ekranu: uruchomiona symulacja TurtleBot3 Burger w Gazebo]`
+![Uruchomiona symulacja TurtleBot3 Burger w Gazebo](figures/gazebo_turtlebot3_world.png)
 
 ### 6.2. Obserwacja symulacji
 
@@ -509,7 +509,7 @@ rviz2 -d config/okno.rviz
 
 Po chwili pojawi się gotowo skonfigurowane okno RViz2.
 
-> `[Miejsce na zrzut ekranu: gotowa konfiguracja RViz2]`
+![Gotowa konfiguracja RViz2](figures/rviz2_okno_config.png)
 
 ### 7.2. Elementy widoku
 
