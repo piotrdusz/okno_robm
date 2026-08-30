@@ -204,9 +204,7 @@ geometry_msgs::msg::Twist RobotController::pathTrackingControl(
   const double error_theta = 0.0;
 
   // TODO 2: Implement the Samson trajectory-tracking controller.
-  command.linear.x = target_velocity.linear.x + k1_ * error_x_robot;
-  command.angular.z = target_velocity.angular.z +
-    k2_ * sign(target_velocity.linear.x) * error_y_robot + k3_ * error_theta;
+  // Assign the calculated linear and angular velocities to command.
 
   return command;
 }
