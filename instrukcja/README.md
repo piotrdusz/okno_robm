@@ -13,7 +13,7 @@ Po wykonaniu ćwiczenia powinieneś umieć:
 - użyć podstawowych poleceń `ros2`;
 - zbudować pakiet ROS 2 za pomocą `colcon`;
 - zidentyfikować dane wejściowe i wyjściowe węzła ROS 2;
-- opublikować polecenie prędkości robota typu `geometry_msgs/msg/Twist`;
+- opublikować polecenie prędkości robota typu `geometry_msgs/msg/TwistStamped`;
 - uzupełnić i przetestować regulator śledzenia trajektorii.
 
 ### Wymagania wstępne
@@ -51,7 +51,7 @@ Za wykonanie ćwiczenia można uzyskać maksymalnie **13 punktów**. Punkty przy
 Podczas prezentacji rozwiązania prowadzący może poprosić o:
 
 - wskazanie używanych tematów ROS 2;
-- wyjaśnienie znaczenia publikowanej wiadomości `geometry_msgs/msg/Twist`;
+- wyjaśnienie znaczenia publikowanej wiadomości `geometry_msgs/msg/TwistStamped`;
 - pokazanie działania regulatora dla nowego celu;
 - krótkie wyjaśnienie uzupełnionego fragmentu kodu.
 
@@ -366,7 +366,7 @@ W ćwiczeniu będą używane między innymi następujące tematy:
 | `/goal_pose` | RViz2 → program studenta | Pozycja i orientacja celu wskazanego myszą. |
 | `/cmd_vel` | program studenta → robot | Polecenie prędkości liniowej i kątowej robota. |
 
-Dla przykładu wiadomość typu `geometry_msgs/msg/Twist`, publikowana na `/cmd_vel`, zawiera między innymi:
+Dla przykładu wiadomość typu `geometry_msgs/msg/TwistStamped`, publikowana na `/cmd_vel`, zawiera między innymi:
 
 - `linear.x` – prędkość jazdy do przodu lub do tyłu w metrach na sekundę;
 - `angular.z` – prędkość obrotu wokół osi pionowej w radianach na sekundę.
@@ -513,7 +513,7 @@ W oknie RViz2 zwróć uwagę na:
 
 ### 7.3. Ręczne sterowanie robotem
 
-Panel **Teleop** publikuje wiadomości typu `geometry_msgs/msg/Twist` na temat `/cmd_vel`.
+Panel **Teleop** publikuje wiadomości typu `geometry_msgs/msg/TwistStamped` na temat `/cmd_vel`.
 
 1. W panelu **Teleop** włącz publikowanie poleceń zaznaczając pole wyboru **Enabled**.
 2. Użyj pola sterowania 2D w panelu.
@@ -601,7 +601,7 @@ Zwróć uwagę na typ wiadomości oraz liczbę publikatorów i subskrybentów.
 Wyświetl definicję wiadomości polecenia prędkości:
 
 ```bash
-ros2 interface show geometry_msgs/msg/Twist
+ros2 interface show geometry_msgs/msg/TwistStamped
 ```
 
 Odszukaj pola `linear` oraz `angular`. Każde z nich ma typ `Vector3`, który zawiera trzy składowe: `x`, `y` i `z`.
@@ -650,7 +650,7 @@ Przed wykonaniem tego kroku wyłącz publikowanie w panelu **Teleop** przyciskie
 Wykonaj polecenie:
 
 ```bash
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1}, angular: {z: 0.0}}"
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{linear: {x: 0.1}, angular: {z: 0.0}}"
 ```
 
 Robot powinien rozpocząć jazdę do przodu. Po kilku sekundach naciśnij `Ctrl+C`, aby zatrzymać publikowanie poleceń. Robot zatrzyma się po krótkiej chwili.
@@ -658,7 +658,7 @@ Robot powinien rozpocząć jazdę do przodu. Po kilku sekundach naciśnij `Ctrl+
 W tym samym poleceniu zmień wartość `angular.z`, na przykład na `0.5`, i sprawdź, jak zmienia się ruch robota:
 
 ```bash
-ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1}, angular: {z: 0.5}}"
+ros2 topic pub --rate 10 /cmd_vel geometry_msgs/msg/TwistStamped "{linear: {x: 0.1}, angular: {z: 0.5}}"
 ```
 
 To samo polecenie będzie później publikowane przez program napisany w C++, z tą różnicą, że wartości prędkości zostaną obliczone przez regulator.
@@ -785,7 +785,7 @@ Węzeł `trajectory_tracker` korzysta z następujących tematów:
 | `/odom` | `nav_msgs/msg/Odometry` | wejście | Aktualna pozycja i orientacja robota. |
 | `/goal_pose` | `geometry_msgs/msg/PoseStamped` | wejście | Cel wskazany narzędziem **2D Goal Pose**. |
 | `/scan` | `sensor_msgs/msg/LaserScan` | wejście | Odległości od przeszkód; używane w zadaniu dodatkowym. |
-| `/cmd_vel` | `geometry_msgs/msg/Twist` | wyjście | Obliczone polecenie prędkości robota. |
+| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | wyjście | Obliczone polecenie prędkości robota. |
 | `/reference_path` | `nav_msgs/msg/Path` | wyjście | Trajektoria odniesienia wyświetlana w RViz2. |
 | `/target_pose` | `geometry_msgs/msg/PoseStamped` | wyjście | Aktualny punkt trajektorii wyświetlany w RViz2. |
 
@@ -1212,7 +1212,7 @@ Prawidłowy rezultat: robot może nie znaleźć optymalnej drogi do celu, ale ni
 | `ros2 topic info /cmd_vel --verbose` | Typ i połączenia tematu. |
 | `ros2 topic echo /odom --once` | Jedna wiadomość odometrii. |
 | `ros2 topic echo /scan --once` | Jedna wiadomość skanera. |
-| `ros2 interface show geometry_msgs/msg/Twist` | Definicja wiadomości prędkości. |
+| `ros2 interface show geometry_msgs/msg/TwistStamped` | Definicja wiadomości prędkości. |
 | `ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` | Uruchomienie Gazebo z TurtleBot3 Burger. |
 | `rviz2 -d config/okno.rviz` | Uruchomienie przygotowanej konfiguracji RViz2. |
 | `colcon build --packages-select okno_trajectory_tracker --symlink-install` | Kompilacja pakietu studenta. |
