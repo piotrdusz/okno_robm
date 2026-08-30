@@ -770,8 +770,6 @@ okno_trajectory_tracker/
 ├── src/
 │   ├── robot_controller.cpp
 │   └── trajectory_tracker_node.cpp
-└── launch/
-	└── trajectory_tracker.launch.py
 ```
 
 | Plik | Rola |
@@ -781,7 +779,6 @@ okno_trajectory_tracker/
 | `trajectory_tracker_node.cpp` | Zawiera funkcję `main` oraz tworzy węzeł ROS 2. |
 | `robot_controller.hpp` | Deklaruje klasę `RobotController`. |
 | `robot_controller.cpp` | Zawiera implementację kontrolera oraz fragmenty `TODO`. |
-| `trajectory_tracker.launch.py` | Uruchamia węzeł z parametrem czasu symulacji. |
 
 ### 10.2. Dane wymieniane przez węzeł
 
@@ -824,14 +821,14 @@ Kontroler może znajdować się w jednym z czterech stanów:
 
 ### 10.5. Uruchomienie szablonu
 
-Po zbudowaniu przestrzeni roboczej uruchom węzeł:
+Po zbudowaniu przestrzeni roboczej uruchom węzeł bezpośrednio. Parametr `use_sim_time:=true` powoduje, że kontroler używa czasu publikowanego przez Gazebo:
 
 ```bash
 source ~/okno_ws/install/setup.bash
 ```
 
 ```bash
-ros2 launch okno_trajectory_tracker trajectory_tracker.launch.py
+ros2 run okno_trajectory_tracker trajectory_tracker_node
 ```
 
 Po uruchomieniu węzeł przejdzie do stanu `Ready`. W RViz2 wyłącz panel **Teleop**, wskaż cel narzędziem **2D Goal Pose** i obserwuj komunikaty w terminalu.
@@ -1043,7 +1040,7 @@ Jeżeli pojawi się błąd kompilacji, przeczytaj pierwszą linię zawierającą
 	```
 
 	```bash
-	ros2 launch okno_trajectory_tracker trajectory_tracker.launch.py
+	ros2 run okno_trajectory_tracker trajectory_tracker_node
 	```
 
 5. W RViz2 wybierz narzędzie **2D Goal Pose**.
