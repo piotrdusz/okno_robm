@@ -1,0 +1,4 @@
+[submodule "teleop_panel"]
+	path = teleop_panel
+	url = https://github.com/RobotnikAutomation/teleop_panel.git
+	branch = ros2-devel
