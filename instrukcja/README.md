@@ -1128,3 +1128,102 @@ Prawidłowy rezultat:
 - robot kończy ruch blisko wskazanego punktu;
 - robot ustawia orientację zgodną ze strzałką celu;
 - terminal wyświetla komunikat `Goal reached.`.
+
+## 14. Zadanie dodatkowe: unikanie kolizji
+
+Za to zadanie można uzyskać maksymalnie **2 punkty**.
+
+Celem zadania jest zmodyfikowanie polecenia ruchu tak, aby robot nie kontynuował jazdy w kierunku przeszkody wykrytej przez skaner laserowy.
+
+### 14.1. Dane ze skanera
+
+Skaner publikuje wiadomości na temacie `/scan` typu:
+
+```text
+sensor_msgs/msg/LaserScan
+```
+
+Odczyty znajdują się w polu:
+
+```cpp
+latest_scan_->ranges
+```
+
+Każdy element tablicy jest odległością w metrach. Kierunek pierwszego pomiaru określa `angle_min`, a różnica kierunków kolejnych pomiarów to `angle_increment`.
+
+Kąt pomiaru o indeksie `i` wynosi:
+
+$$
+\alpha_i = \text{angle\_min} + i \cdot \text{angle\_increment}
+$$
+
+Kierunek jazdy robota do przodu odpowiada kątowi bliskiemu $0\,\mathrm{rad}$.
+
+### 14.2. Miejsce implementacji
+
+W pliku:
+
+```text
+okno_trajectory_tracker/src/robot_controller.cpp
+```
+
+znajdź metodę:
+
+```cpp
+RobotController::collisionAvoidance(...)
+```
+
+W metodzie znajduje się komentarz `TODO 4 (additional)`.
+
+Metoda otrzymuje polecenie obliczone przez regulator i zwraca polecenie bezpieczne. Zmienna `safe_command` jest początkowo kopią polecenia regulatora.
+
+### 14.3. Wymagane działanie
+
+1. Sprawdź, czy odebrano już wiadomość ze skanera. Wskaźnik `latest_scan_` może być pusty bezpośrednio po uruchomieniu węzła.
+2. Przeanalizuj tylko pomiary z przodu robota, na przykład w zakresie $[-30^\circ, 30^\circ]$.
+3. Pomiń odczyty niepoprawne: `NaN`, nieskończoność oraz wartości poza zakresem działania skanera.
+4. Jeżeli odległość do przeszkody z przodu jest mniejsza od wybranego progu bezpieczeństwa, zmień polecenie ruchu tak, aby robot:
+	- nie jechał do przodu;
+	- obracał się, aby ominąć przeszkodę.
+5. Zwróć zmodyfikowaną wartość `safe_command`.
+
+Dobierz próg bezpieczeństwa w metrach. Powinien zapewnić widoczną reakcję robota, ale nie powodować zatrzymania przy odległej ścianie.
+
+### 14.4. Test w symulacji
+
+1. Zbuduj pakiet i uruchom Gazebo, RViz2 oraz kontroler.
+2. Wskaż cel po przeciwnej stronie przeszkody lub ręcznie skieruj robota w stronę ściany.
+3. Obserwuj punkty skanera w RViz2.
+4. Sprawdź, czy robot zatrzymuje jazdę do przodu przed przeszkodą i rozpoczyna skręt.
+5. Powtórz próbę dla przeszkody znajdującej się z lewej i z prawej strony.
+
+Prawidłowy rezultat: robot może nie znaleźć optymalnej drogi do celu, ale nie powinien kontynuować ruchu prosto w wykrytą bliską przeszkodę.
+
+## 15. Typowe problemy
+
+| Problem | Możliwa przyczyna i rozwiązanie |
+| --- | --- |
+| `ros2: command not found` | Otwórz nowy terminal WSL. Sprawdź, czy w `~/.bashrc` znajduje się `source /opt/ros/jazzy/setup.bash`. |
+| `Package '...' not found` | Wykonaj `cd ~/okno_ws`, następnie `colcon build --symlink-install` i `source install/setup.bash`. |
+| Po zmianie kodu zachowanie robota się nie zmienia | Ponownie zbuduj pakiet przez `colcon build --packages-select okno_trajectory_tracker --symlink-install`, a następnie wykonaj `source install/setup.bash` i uruchom węzeł od nowa. |
+| Gazebo lub RViz2 nie uruchamia okna | Sprawdź, czy terminal został uruchomiony przez `wsl`, a system Windows jest aktualny. Zamknij proces przez `Ctrl+C`, otwórz nowy terminal i spróbuj ponownie. |
+| RViz2 nie wyświetla modelu, TF albo skanera | Najpierw uruchom Gazebo. Następnie uruchom RViz2 z konfiguracją `config/okno.rviz`. |
+| Robot nie reaguje na panel Teleop | Sprawdź, czy panel został uruchomiony przyciskiem **Start** oraz czy Gazebo nadal działa. |
+| Robot reaguje chaotycznie | Tylko jedno źródło może publikować ruch. Zatrzymaj publikowanie w Teleop przed uruchomieniem kontrolera oraz przerwij inne polecenia `ros2 topic pub` przez `Ctrl+C`. |
+| Robot nie rusza po wskazaniu celu | Upewnij się, że węzeł `trajectory_tracker` jest uruchomiony, a panel Teleop jest zatrzymany. Sprawdź też, czy regulator z zadania podstawowego został uzupełniony i czy `k1`, `k2`, `k3` są dodatnie. |
+| Błąd kompilacji C++ | Odszukaj pierwszą linię z `error:`. Najczęściej przyczyną jest brak średnika, literówka w nazwie zmiennej albo niedomknięty nawias. |
+
+## Załącznik A. Ściąga poleceń
+
+| Polecenie | Zastosowanie |
+| --- | --- |
+| `ros2 node list` | Lista działających węzłów. |
+| `ros2 topic list` | Lista tematów. |
+| `ros2 topic info /cmd_vel --verbose` | Typ i połączenia tematu. |
+| `ros2 topic echo /odom --once` | Jedna wiadomość odometrii. |
+| `ros2 topic echo /scan --once` | Jedna wiadomość skanera. |
+| `ros2 interface show geometry_msgs/msg/Twist` | Definicja wiadomości prędkości. |
+| `ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py` | Uruchomienie Gazebo z TurtleBot3 Burger. |
+| `rviz2 -d config/okno.rviz` | Uruchomienie przygotowanej konfiguracji RViz2. |
+| `colcon build --packages-select okno_trajectory_tracker --symlink-install` | Kompilacja pakietu studenta. |
+| `source ~/okno_ws/install/setup.bash` | Udostępnienie zbudowanych pakietów w terminalu. |
