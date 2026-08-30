@@ -1147,10 +1147,10 @@ latest_scan_->ranges
 
 Każdy element tablicy jest odległością w metrach. Kierunek pierwszego pomiaru określa `angle_min`, a różnica kierunków kolejnych pomiarów to `angle_increment`.
 
-Kąt pomiaru o indeksie `i` wynosi:
+Kąt pierwszego pomiaru jest zapisany w polu `angle_min`, a różnica między kolejnymi kątami w `angle_increment`. Kąt pomiaru o indeksie `i` wynosi:
 
 $$
-\alpha_i = \text{angle\_min} + i \cdot \text{angle\_increment}
+\alpha_i = \alpha_0 + i \cdot \Delta \alpha
 $$
 
 Kierunek jazdy robota do przodu odpowiada kątowi bliskiemu $0\,\mathrm{rad}$.
