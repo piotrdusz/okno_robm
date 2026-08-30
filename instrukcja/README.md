@@ -515,12 +515,12 @@ W oknie RViz2 zwróć uwagę na:
 
 Panel **Teleop** publikuje wiadomości typu `geometry_msgs/msg/Twist` na temat `/cmd_vel`.
 
-1. W panelu **Teleop** włącz publikowanie poleceń przyciskiem **Enabled**.
+1. W panelu **Teleop** włącz publikowanie poleceń zaznaczając pole wyboru **Enabled**.
 2. Użyj pola sterowania 2D w panelu.
 3. Przesunięcie wskaźnika w górę powoduje jazdę do przodu.
 4. Przesunięcie wskaźnika w dół powoduje jazdę do tyłu.
 5. Przesunięcie wskaźnika w lewo lub w prawo powoduje skręt robota.
-6. Przyciskiem **Stop** zatrzymaj robota.
+6. Odznacz pole wyboru **Enabled**, żeby wstrzymać publikowanie prędkości.
 
 Obserwuj jednocześnie ruch robota w Gazebo oraz zmianę jego położenia w RViz2.
 
