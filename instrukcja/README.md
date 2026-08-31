@@ -726,6 +726,8 @@ colcon build --symlink-install
 
 Opcja `--symlink-install` sprawia, że po zmianie plików konfiguracyjnych lub skryptów Python nie trzeba kopiować ich do katalogu `install` przy każdym budowaniu.
 
+Budowanie możesz też uruchomić bezpośrednio z VS Code skrótem `Ctrl+Shift+B` i wybierając zadanie `colcon: build`.
+
 Po poprawnej kompilacji ostatnie linie wyniku powinny zawierać komunikat podobny do:
 
 ```text
