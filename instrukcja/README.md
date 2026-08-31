@@ -833,7 +833,7 @@ Kontroler może znajdować się w jednym z czterech stanów:
 
 ### 10.5. Uruchomienie szablonu
 
-Po zbudowaniu przestrzeni roboczej uruchom węzeł bezpośrednio. Parametr `use_sim_time:=true` powoduje, że kontroler używa czasu publikowanego przez Gazebo:
+Po zbudowaniu przestrzeni roboczej uruchom węzeł bezpośrednio:
 
 ```bash
 source ~/okno_ws/install/setup.bash

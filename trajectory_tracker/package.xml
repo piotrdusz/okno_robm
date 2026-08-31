@@ -3,7 +3,7 @@
   <name>trajectory_tracker</name>
   <version>0.1.0</version>
   <description>ROS 2 exercise template for differential-drive trajectory tracking.</description>
-  <maintainer email="todo@example.com">TODO</maintainer>
+  <maintainer email="piotr.duszak@pw.edu.pl">Piotr Duszak</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
